@@ -1,0 +1,280 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interactive Chart Blocks</title>
+
+  <!-- ✅ Font Awesome CDN (simple & reliable) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+  <style>
+    body {
+      margin: 0;
+      background:linear-gradient(120deg, #001f3f, #003366); /* Dark blue background */
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
+    }
+
+    /* === STATIC BACKGROUND BLOCKS (opacity reduced) === */
+    .static-block {
+      position: absolute;
+      background: #d6f3ff;
+      border-radius: 16px;
+      width: 180px;
+      height: 180px;
+      opacity: 0.2; /* 🔽 Reduced visibility */
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      animation: float 6s ease-in-out infinite;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .s1 { top: 10%; left: 15%; }
+    .s2 { top: 60%; left: 25%; }
+    .s3 { top: 30%; left: 70%; }
+    .s4 { top: 75%; left: 80%; }
+    .s5 { top: 20%; left: 50%; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .static-block i {
+      font-size: 50px;
+      color: #0077aa;
+      opacity: 0.7;
+    }
+
+    /* === CENTER TEXT === */
+    .center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 42px;
+      font-weight: 600;
+      color: white;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .popup-container {
+      display: inline-block;
+      margin: 0 12px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* === ANIMATED BLOCKS ON HOVER === */
+    .floating-block {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: #d6f3ff;
+      border-radius: 18px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transform: scale(0);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .floating-block i {
+      font-size: 48px;
+      color: #0077aa;
+    }
+
+    .floating-block.show {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .trial-btn {
+  padding: 14px 28px;
+  font-size: 18px;
+  background-color: #7ecfff; /* 🌤️ Light blue */
+  color: #003b66; /* Dark text for contrast */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.trial-btn:hover {
+  transform: scale(1.08);
+  background-color: #5ec5f0; /* Slightly darker on hover */
+}
+
+.bottom-link {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  z-index: 100;
+}
+
+.bottom-link a {
+  text-decoration: none;
+  color: #7ecfff; /* Light blue */
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.bottom-link a:hover {
+  color: #00c4ff; /* Slightly brighter on hover */
+  text-decoration: underline;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- STATIC CHART BLOCKS -->
+  <div class="static-block s1"><i class="fas fa-chart-bar"></i></div>
+  <div class="static-block s2"><i class="fas fa-chart-pie"></i></div>
+  <div class="static-block s3"><i class="fas fa-chart-line"></i></div>
+  <div class="static-block s4"><i class="fas fa-chart-area"></i></div>
+  <div class="static-block s5"><i class="fas fa-chart-column"></i></div>
+
+  <!-- CENTERED TEXT -->
+  <!-- INFO TEXT ABOVE MAIN MESSAGE -->
+<!-- SINGLE ROW INFO TEXT ABOVE MAIN HEADING -->
+<!-- SINGLE ROW INFO TEXT ABOVE MAIN HEADING -->
+<div class="info-row"
+     style="
+       position: absolute;
+       top: 40%;
+       left: 50%;
+       transform: translateX(-50%);
+       color: white;
+       display: flex;
+       gap: 40px;
+       font-size: 18px;
+       align-items: center;
+       justify-content: center;
+       flex-wrap: wrap;
+       text-align: center;
+     
+     ">
+  <div>
+    <i class="fas fa-star" style="color: gold; margin-right: 8px;"></i>
+    4.8 rating on Capterra
+  </div>
+
+  <div>
+    <i class="fas fa-rotate" style="color: #00ffee; margin-right: 8px;"></i>
+    350+ reviews on Xero
+  </div>
+
+  <div>
+    <i class="fas fa-chart-bar" style="color: #7ecfff; margin-right: 8px;"></i>
+    550+ reviews
+  </div>
+</div>
+
+
+
+<!-- MAIN CENTERED TEXT -->
+<!-- MAIN CENTERED TEXT WITH AI INSIGHTS BELOW -->
+<div class="center-text" style="text-align: center; margin-top: 100px;">
+  <div style="font-size: 42px;">
+    <span class="popup-container" data-type="reports">Reports</span>,
+    <span class="popup-container" data-type="forecasts">Forecasts</span>,
+    <span class="popup-container" data-type="dashboards">Dashboards</span> &
+    <span class="popup-container" data-type="consolidation">Consolidation</span>
+  </div>
+
+  <!-- 🔽 New line with star icon and AI Insights -->
+  <div style="margin-top: 20px; font-size: 20px; color: #ffffffb3;">
+    <i class="fas fa-star" style="color: gold; margin-right: 8px;"></i>
+    Now with <strong>AI_insights</strong>
+  </div>
+  <!-- 🔵 Start Free Trial Button -->
+<div style="margin-top: 30px;">
+  <button class="trial-btn">Start 14-day Free Trial</button>
+</div>
+
+<!-- 🔗 Bottom Anchor Link -->
+<div class="bottom-link">
+  <a href="#features">See what we do</a>
+</div>
+
+</div>
+
+
+  <!-- HOVER-GENERATED BLOCK CONTAINER -->
+  <div id="block-container"></div>
+
+  <script>
+    const container = document.getElementById("block-container");
+    const words = document.querySelectorAll(".popup-container");
+
+    const chartIcons = {
+      reports: ["fa-chart-bar", "fa-chart-column"],
+      forecasts: ["fa-chart-line", "fa-chart-area"],
+      dashboards: ["fa-chart-pie", "fa-chart-bar"],
+      consolidation: ["fa-chart-line", "fa-chart-pie"]
+    };
+
+    words.forEach(word => {
+      word.addEventListener("mouseenter", () => {
+        const type = word.dataset.type;
+        generateBlocks(type);
+      });
+
+      word.addEventListener("mouseleave", () => {
+        clearBlocks();
+      });
+    });
+
+    function generateBlocks(type) {
+      clearBlocks();
+      const icons = chartIcons[type];
+      const count = 4;
+
+      for (let i = 0; i < count; i++) {
+        const block = document.createElement("div");
+        block.className = "floating-block";
+
+        const icon = document.createElement("i");
+        icon.className = `fas ${icons[i % icons.length]}`;
+        block.appendChild(icon);
+
+        const top = Math.random() * window.innerHeight;
+        const left = Math.random() * window.innerWidth;
+
+        block.style.top = `${top}px`;
+        block.style.left = `${left}px`;
+
+        container.appendChild(block);
+
+        setTimeout(() => {
+          block.classList.add("show");
+        }, 50 + i * 100);
+      }
+    }
+
+    function clearBlocks() {
+      const blocks = document.querySelectorAll(".floating-block");
+      blocks.forEach(block => {
+        block.classList.remove("show");
+        setTimeout(() => block.remove(), 300);
+      });
+    }
+  </script>
+
+</body>
+</html> 

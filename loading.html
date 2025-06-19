@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zoom to Next Page</title>
+  <style>
+    body {
+      background: linear-gradient(120deg, #001f3f, #003366);
+      margin: 0;
+      font-family: sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+      padding: 12px 0;
+    }
+
+    nav a {
+      margin: 0 20px;
+      font-size: 18px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      perspective: 1000px;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 100%;
+      height: 2px;
+      background: white;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+
+    nav a:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    nav a:hover {
+      transform: rotateX(15deg);
+    }
+
+    .center-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: transform 2s ease-in-out;
+      transform-origin: center;
+      z-index: 2;
+    }
+
+    .zoomed {
+      transform: scale(25);
+    }
+
+    .progress-container {
+      width: 300px;
+      height: 50px;
+      background: rgba(0, 51, 102, 0.6);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      display: none;
+      box-shadow: 0 0 20px rgba(0, 153, 255, 0.5);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+      transform: scale(1.2);
+      z-index: 2;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ballCanvas"></canvas>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="#" onclick="startTransition()">Home</a>
+   
+   <a href="#" onclick="startTransition('other.html')">Product</a>
+
+  </nav>
+
+  <div class="center-wrapper" id="centerWrapper">
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progress"></div>
+    </div>
+  </div>
+
+  <div class="progress-text" id="progressText">0</div>
+
+  <script>
+    // Floating balls animation
+    const canvas = document.getElementById('ballCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let balls = [];
+    const ballCount = 30;
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < ballCount; i++) {
+      balls.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: 40,
+        dx: (Math.random() - 0.5) * 1.5,
+        dy: (Math.random() - 0.5) * 1.5,
+        color: 'rgba(0, 153, 255, 0.4)'
+      });
+    }
+
+    function drawBalls() {
+      ctx.clearRect(0, 0, width, height);
+      balls.forEach(ball => {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = ball.color;
+        ctx.fill();
+      });
+    }
+
+    function updateBalls(mouseX, mouseY) {
+      balls.forEach(ball => {
+        const dx = ball.x - mouseX;
+        const dy = ball.y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200) {
+          ball.x += dx * 0.01;
+          ball.y += dy * 0.01;
+        } else {
+          ball.x += ball.dx;
+          ball.y += ball.dy;
+          if (ball.x < 0 || ball.x > width) ball.dx *= -1;
+          if (ball.y < 0 || ball.y > height) ball.dy *= -1;
+        }
+      });
+    }
+
+    let mouseX = width / 2;
+    let mouseY = height / 2;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animate() {
+      updateBalls(mouseX, mouseY);
+      drawBalls();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Loading transition logic
+    function startTransition(targetPage = "mainpage.html") {
+  const progress = document.getElementById("progress");
+  const progressText = document.getElementById("progressText");
+  const centerWrapper = document.getElementById("centerWrapper");
+  const progressContainer = document.getElementById("progressContainer");
+
+  let width = 0;
+  progress.style.width = '0%';
+  progressText.textContent = '0';
+  progressContainer.style.display = 'block';
+  progressText.style.display = 'block';
+
+  const interval = setInterval(() => {
+    if (width >= 100) {
+      clearInterval(interval);
+
+      setTimeout(() => {
+        centerWrapper.classList.add("zoomed");
+        progressText.style.display = "none";
+      }, 500);
+
+      setTimeout(() => {
+        window.location.href = targetPage;
+      }, 2500);
+
+    } else {
+      width++;
+      progress.style.width = width + "%";
+      progressText.textContent = width;
+    }
+  }, 30);
+}
+
+  </script>
+</body>
+</html>
